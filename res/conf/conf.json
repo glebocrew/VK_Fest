@@ -1,0 +1,63 @@
+{
+    
+    "database":{
+        "host":"localhost",
+        "port":3306,
+        "user":"root",
+        "password":"glebocrew",
+        "db":"vk"
+    },
+    "phrazes":{
+        "start":"start phraze",
+        "email":"email phraze",
+        "incorrect-email":"incorrect email phraze",
+        "correct-email":"correct email phraze",
+        "game":"game phraze",
+        "level":"level phraze",
+        "admin":"admin phraze (send message bellow to be sent to other users)",
+        "materials_pw":"materials pw phraze",
+        "incorrect_materials_pw":"materials pw incorrect phraze"
+    },
+    "pngs": "res/img/png/",
+    "paths":{
+        "category1":{
+            "level1": "default.png",
+            "level2": "default.png",
+            "level3": "default.png",
+            "level4": "default.png",
+            "level5": "default.png"
+        },
+        "category2":{
+            "level1": "default.png",
+            "level2": "default.png",
+            "level3": "default.png",
+            "level4": "default.png",
+            "level5": "default.png"
+        },
+        "category3":{
+            "leve1": "default.png",
+            "leve2": "default.png",
+            "leve3": "default.png",
+            "leve4": "default.png",
+            "leve5": "default.png"
+        },
+        "category4":{
+            "level1": "default.png",
+            "level2": "default.png",
+            "level3": "default.png",
+            "level4": "default.png",
+            "level5": "default.png"
+        },
+        "category5":{
+            "level1": "default.png",
+            "level2": "default.png",
+            "level3": "default.png",
+            "level4": "default.png",
+            "level5": "default.png"
+        }
+    },
+    "materials":{
+        "password":"pw",
+        "materials":"materials, links are here"
+    }
+}
