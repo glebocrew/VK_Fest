@@ -46,7 +46,7 @@ class Users:
             "get_by_username": "SELECT * FROM users WHERE username = ?;",
             "get_by_email": "SELECT * FROM users WHERE email = ?;",
             "insert_with_username": "INSERT INTO users (username, id, email) VALUES (?, ?, ?);",
-            "get_all_ids": "SELECT id FROM users;"
+            "get_all_ids": "SELECT DISTINCT id FROM users;"
         }
 
     def get_by_username(self, username:str):
