@@ -86,9 +86,9 @@ def admin_forward(message):
             print(e)
 
 
-@bot.message_handler(commands=["materials"])
-def materials(message):
-    bot.send_message(message.chat.id, text=configures["materials"]["materials"])
+# @bot.message_handler(commands=["materials"])
+# def materials(message):
+#     bot.send_message(message.chat.id, text=configures["materials"]["materials"])
 
 
 # @bot.message_handler(commands=["materials"])
