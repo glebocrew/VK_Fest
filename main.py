@@ -2,10 +2,14 @@ from telebot import *
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 from res.scr.ops import *
 
+apihelper.READ_TIMEOUT = 60  
+apihelper.CONNECT_TIMEOUT = 30  
+apihelper.RETRY_ON_ERROR = True  
+apihelper.MAX_RETRIES = 3  
 
 CONF_PATH = "res/conf/conf.json"
 API = open("API.txt", "r", encoding="utf-8").read().split()[0]
-ADMINS = [1433192741]
+ADMINS = [1433192741, 880031561]
 
 configures = read_json(CONF_PATH)
 # print(configures)
@@ -18,24 +22,36 @@ bot = TeleBot(API)
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    keyboard = InlineKeyboardMarkup()
+    online_lyc = InlineKeyboardButton(text="Тг канал Лицея Онлайн", url="https://t.me/hselyc_online")
+    lyc = InlineKeyboardButton(text="Тг канал Большого Лицея", url="https://t.me/lyceumhse")
+    ready = InlineKeyboardButton(text="Готово!", callback_data="ready")
+
+    keyboard.add(online_lyc)
+    keyboard.add(lyc)
+    keyboard.add(ready)
+
+    bot.send_message(message.chat.id, text=configures["phrazes"]["start"], reply_markup=keyboard)
+
     if users.get_by_username(message.chat.username) != None:
-        bot.send_message(message.chat.id, text=configures["phrazes"]["start"])
-    else:
-        bot.send_message(message.chat.id, text=configures["phrazes"]["email"])
-        bot.register_next_step_handler_by_chat_id(message.chat.id, email)
+        users.insert_with_username(message.chat.username, message.chat.id, "NO_EMAIL")
+
+    # else:
+    #     bot.send_message(message.chat.id, text=configures["phrazes"]["email"])
+    #     bot.register_next_step_handler_by_chat_id(message.chat.id, email)
     
 
         
-def email(message):
-    if "@" in message.text:
-        users.insert_with_username(message.chat.username, message.chat.id, message.text)
-        bot.send_message(message.chat.id, text=configures["phrazes"]["correct-email"])
-        bot.send_message(message.chat.id, text=configures["materials"]["materials"])
+# def email(message):
+#     if "@" in message.text:
+#         users.insert_with_username(message.chat.username, message.chat.id, message.text)
+#         bot.send_message(message.chat.id, text=configures["phrazes"]["correct-email"])
+#         bot.send_message(message.chat.id, text=configures["materials"]["materials"])
 
-    else:
-        bot.send_message(message.chat.id, text=configures["phrazes"]["incorrect-email"])
-        bot.send_message(message.chat.id, text=configures["phrazes"]["email"])
-        bot.register_next_step_handler_by_chat_id(message.chat.id, email)
+#     else:
+#         bot.send_message(message.chat.id, text=configures["phrazes"]["incorrect-email"])
+#         bot.send_message(message.chat.id, text=configures["phrazes"]["email"])
+#         bot.register_next_step_handler_by_chat_id(message.chat.id, email)
 
 # @bot.message_handler(commands=["game"])
 # def game(message):
@@ -63,6 +79,26 @@ def email(message):
 #         photo = open(configures["pngs"] + configures["paths"][path[0]][path[1]], "rb")
 #         bot.send_photo(call.message.chat.id, photo=photo)
 #         photo.close()
+
+        
+def email(message):
+    if "@" in message.text:
+        users.change_email(message.chat.username, message.text)
+        bot.send_message(message.chat.id, text=configures["phrazes"]["correct-email"])
+
+    else:
+        bot.send_message(message.chat.id, text=configures["phrazes"]["incorrect-email"])
+        bot.send_message(message.chat.id, text=configures["phrazes"]["email2"])
+        bot.register_next_step_handler_by_chat_id(message.chat.id, email)
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback(call):
+    if call.data == "ready":
+        bot.send_message(call.message.chat.id, text=configures["phrazes"]["email"])
+        bot.register_next_step_handler_by_chat_id(call.message.chat.id, callback=email)
+
+
+
 
 @bot.message_handler(commands=["admin"])
 def admin(message):
@@ -104,4 +140,4 @@ def admin_forward(message):
 
 
 if __name__ == "__main__":
-    bot.infinity_polling()
+    bot.polling(60)
